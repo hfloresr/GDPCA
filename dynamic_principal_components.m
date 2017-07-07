@@ -11,20 +11,25 @@
 % The class may contains methods like model.train(), model.evaluate(), ...
 % - (3.) add test cases (currently zero test case)
 
+
 function dynamic_principal_components
 % run the DPC model
 
 % set up
 %z = normrnd(0, 1, [10, 100]);
-z = load('z.mat')
-z = z.z
-k1 = 5;
-k2 = 3;
+%z = load('z.mat');
+z = load('F141020-lfp-5min-1kHz.mat');
+z = z.pre_pmcao;
+z = z(1:1000,1:32)';
+%z = z.z
+k1 = 50;
+k2 = 30;
 k = k1 + k2;
 [m, T] = size(z);
 %f_init = normrnd(0, 1, [T + k, 1]);
-f_init = load('f.mat')
-f_init = f_init.f
+%f_init = load('f.mat');
+%f_init = f_init.f;
+f_init = init_f(z, k);
 alpha_init = nan;
 beta_init = nan;
 
@@ -32,7 +37,7 @@ beta_init = nan;
 f = f_init;
 alpha = alpha_init;
 beta = beta_init;
-train_iterations = 100;
+train_iterations = 20;
 loss_values = zeros(train_iterations, 1);
 
 % Save z and f for testing in R
@@ -56,13 +61,25 @@ title('factor');
 xlabel('time');
 
 % Save loss_values
-save('loss_values.mat', 'loss_values')
+save('loss_values.mat', 'loss_values');
 
 end
 
 % ---------- below are all helper functions -------------------------------
 % not optimized for speed yet (use a lot of for loops)
 %
+
+function f_init = init_f(z, k)
+    [m, T] = size(z);
+    f_init = zeros(T + k, 1);
+    z_0 = z - mean(z);
+    z_0 = z_0';
+    [U,S,V] = svd(z_0);
+    pc = z_0 * V(:,1);
+    pc = (pc - mean(pc)) / std(pc);
+    f_init(1:T,1) = pc;
+end
+
 function [f_new, alpha_new, beta_new] = run_train_step(z, k, f, alpha, beta)
 [m, T] = size(z);
 [alpha_new, beta_new] = alpha_beta(z, f, k);

@@ -46,6 +46,13 @@ def run_dpc():
     plt.show()
 
 
+def init_f(z, k):
+    z = z - np.mean(z, axis=0)
+    [u, s, v] = np.linalg.svd(z)
+    v = v.T
+    return np.dot(z, v[:, 1])
+
+
 def run_train_step(z, k, f, alpha, beta):
     m, T = z.shape
     alpha_new, beta_new = alpha_beta(z, f, k)
