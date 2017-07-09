@@ -101,8 +101,7 @@ dynamic_principal_components <- function() {
 # not optimized for speed yet (use a lot of for loops)
 #
 
-run_train_step <- function(z, k, f, alpha, beta){
-
+run_train_step <- function(z, k, f, alpha, beta) {
   m = nrow(z);
   T = ncol(z);
   ab = alpha_beta(z, f, k);
@@ -139,44 +138,70 @@ C_alpha <- function(z, alpha, k){
   return(C)
 }
 
-D_beta = function(z, beta, k){
-  m = dim(z)[1]
-  T = dim(z)[2]
-  D = array(0,dim=c(m,T + k,T + k))
-  for (j in 1:m) {
-    for (t in 1:dim(D)[2]){
-      for (q in 1:dim(D)[3]){
-        if ((q >= max(t - k, 1)) && (q <= min(t + k, T + k))) {
-          for (v in max(1, t - k, q - k):min(t, q, T)){
-            D[j, t, q] = D[j, t, q] + beta[j, q - v + 1] * beta[j, t - v + 1];
-          }
-        }
+
+D_beta <- function(rbeta, T, k) {
+  d_mat = array(0, dim=c(T+k, T+k))
+  for (t in 1:T+k) {
+    for (r in max(t-k, 1):min(t,T)) {
+      for(q in r:r+k) {
+        d_mat[t,q] = d_mat[t,q] + rbeta[q-r] %*% rbeta[t-r]
       }
     }
   }
-
-  return(D)
+  return (beta_mat)
 }
 
+#D_beta = function(z, beta, k){
+#  m = dim(z)[1]
+#  T = dim(z)[2]
+#  D = array(0,dim=c(m,T + k,T + k))
+#  for (j in 1:m) {
+#    for (t in 1:dim(D)[2]){
+#      for (q in 1:dim(D)[3]){
+#        if ((q >= max(t - k, 1)) && (q <= min(t + k, T + k))) {
+#          for (v in max(1, t - k, q - k):min(t, q, T)){
+#            D[j, t, q] = D[j, t, q] + beta[j, q - v + 1] * beta[j, t - v + 1];
+#          }
+#        }
+#      }
+#    }
+#  }
+#
+#  return(D)
+#}
 
-f_alpha_beta <- function(z, k, alpha, beta){
-  m = nrow(z);
-  T = ncol(z);
-  D_3d = D_beta(z, beta, k);
-  D = drop(colSums(D_3d));
-  C_3d = C_alpha(z, alpha, k);
-  sum_Cj_betaj = 0;
-  for (j in 1:m){
-    beta_v = c(beta[j, ])
-    beta_t = t(beta_v)
-    beta_tt = t(beta_t)
-    sum_Cj_betaj = sum_Cj_betaj + drop(C_3d[j, , ]) %*% Conj(beta_tt);
 
+f_alpha_beta <- function(Z, alpha, beta, k){
+  m = nrow(Z)
+  T = ncol(Z)
+  D = array(0, dim=c(T+k, T+k))
+  f = array(0, dim=c(T+k, 1))
+  for (j in 1:m) {
+    D = D + D_beta(beta[j,], T, k)
+    f = f + C_alpha(Z[j,], alpha[j]) %*% beta[j,]
   }
-
-  f = solve(D, sum_Cj_betaj);
-  return(f);
+  f <- ifelse(rcond(D)>1e-10, solve(D,f), pinv(D))
 }
+
+
+#f_alpha_beta <- function(z, k, alpha, beta){
+#  m = nrow(z);
+#  T = ncol(z);
+#  D_3d = D_beta(z, beta, k);
+#  D = drop(colSums(D_3d));
+#  C_3d = C_alpha(z, alpha, k);
+#  sum_Cj_betaj = 0;
+#  for (j in 1:m){
+#    beta_v = c(beta[j, ])
+#    beta_t = t(beta_v)
+#    beta_tt = t(beta_t)
+#    sum_Cj_betaj = sum_Cj_betaj + drop(C_3d[j, , ]) %*% Conj(beta_tt);
+#
+#  }
+#
+#  f = solve(D, sum_Cj_betaj);
+#  return(f);
+#}
 
 
 F_f <- function(z, f, k){
