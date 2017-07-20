@@ -9,10 +9,11 @@ pre_pmcao = data$pre.pmcao
 
 # Get factors for all 300 epochs for pre_pmcao
 num_epochs = 300
-k = 2  # lags
+k = 10  # lags
 excludes = c(1:5, 7:8, 11:12, 14:16, 18:26, 28:32)
 
-ncores = 34
+#ncores = 34
+ncores = 2
 cl <- makeCluster(ncores)
 registerDoParallel(cl)
 
