@@ -26,4 +26,4 @@ stopCluster(cl)
 
 # Write matrix
 colnames(test_epoch_factors) = NULL
-write.matrix(test_epoch_factors,'gdpca_factors_k10.rmat', sep='\t')
+write.matrix(epoch_factors,'gdpca_factors_k10.rmat', sep='\t')
