@@ -1,4 +1,4 @@
-Package: GDPCA
+Package: gdpc
 Type: Package
 Title: Generalized Dynamic Principal Components Analysis
 Version: 1.0.0

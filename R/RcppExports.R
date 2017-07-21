@@ -2,14 +2,14 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 getFitted <- function(f_fin, f_ini, beta, alpha, k) {
-    .Call('GDPCA_getFitted', PACKAGE = 'GDPCA', f_fin, f_ini, beta, alpha, k)
+    .Call('gdpc_getFitted', PACKAGE = 'gdpc', f_fin, f_ini, beta, alpha, k)
 }
 
 getFini <- function(Z, k) {
-    .Call('GDPCA_getFini', PACKAGE = 'GDPCA', Z, k)
+    .Call('gdpc_getFini', PACKAGE = 'gdpc', Z, k)
 }
 
 gdpc_priv <- function(Z, k, f_ini, passf_ini, tol, niter_max, sel) {
-    .Call('GDPCA_gdpc_priv', PACKAGE = 'GDPCA', Z, k, f_ini, passf_ini, tol, niter_max, sel)
+    .Call('gdpc_gdpc_priv', PACKAGE = 'gdpc', Z, k, f_ini, passf_ini, tol, niter_max, sel)
 }
 

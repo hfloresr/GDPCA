@@ -1,6 +1,6 @@
 library(doParallel)
 library(R.matlab)
-library(GDPCA)
+library(gdpc)
 library(MASS)
 
 # Read in pre_pmcao data
