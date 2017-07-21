@@ -1,0 +1,23 @@
+Package: GDPCA
+Type: Package
+Title: Generalized Dynamic Principal Components Analysis
+Version: 1.0.0
+Date: 2017-06-20
+Author: Hector Flores <hfloresr@uci.edu>
+Maintainer: Hector Flores <hfloresr@uci.edu>
+Description: Generalized Dynamic Principal Components
+    introduced in Peña and Yohai (2016) <DOI:10.1080/01621459.2015.1072542>.
+License: GPL (>= 2)
+Imports:
+    xts,
+    zoo,
+    methods,
+    Rcpp (>= 0.12.7),
+    parallel,
+    doParallel,
+    foreach
+LinkingTo: Rcpp, RcppArmadillo (>= 0.7.500.0.0)
+Depends:
+    R (>= 3.3.1)
+NeedsCompilation: yes
+Encoding: UTF-8
