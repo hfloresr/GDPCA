@@ -25,5 +25,5 @@ epoch_factors = foreach (i=1:num_epochs, .packages='gdpc', .combine='cbind') %do
 stopCluster(cl)
 
 # Write matrix
-colnames(test_epoch_factors) = NULL
+colnames(epoch_factors) = NULL
 write.matrix(epoch_factors,'gdpca_factors_k10.rmat', sep='\t')
