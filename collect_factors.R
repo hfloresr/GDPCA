@@ -17,7 +17,7 @@ ncores = 2
 cl <- makeCluster(ncores)
 registerDoParallel(cl)
 
-epoch_factors = foreach (i=1:num_epochs, .packages='GDPCA', .combine='cbind') %dopar%{
+epoch_factors = foreach (i=1:num_epochs, .packages='gdpc', .combine='cbind') %dopar%{
   fit <- gdpc(pre_pmcao[((i-1)*1000+1):(i*1000), excludes], k)
   factor = (fit$f - mean(fit$f)) / sd(fit$f)
   factor
