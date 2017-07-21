@@ -4,7 +4,7 @@ library(gdpc)
 library(MASS)
 
 # Read in pre_pmcao data
-data = readMat('F141020-lfp-5min-1kHz.mat')
+data = readMat('data/F141020-lfp-5min-1kHz.mat')
 pre_pmcao = data$pre.pmcao
 
 # Get factors for all 300 epochs for pre_pmcao
@@ -26,4 +26,4 @@ stopCluster(cl)
 
 # Write matrix
 colnames(test_epoch_factors) = NULL
-write.matrix(test_epoch_factors,'gdpca_factors.rmat', sep='\t')
+write.matrix(test_epoch_factors,'gdpca_factors_k10.rmat', sep='\t')
